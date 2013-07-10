@@ -39,7 +39,29 @@ class Point {
 
 }
 
+class Calc {
+	public int fact(int n) {
+		return n == 1 ? 1 : n * fact(n - 1);
+	}
+}
+
 public class Demo3 {
+
+	@Test
+	public void test2() throws NotFoundException, CannotCompileException,
+			IOException, InstantiationException, IllegalAccessException,
+			SecurityException, NoSuchMethodException, IllegalArgumentException,
+			InvocationTargetException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.Calc");
+		CtMethod ctMethod = ctClass.getDeclaredMethod("fact");
+		ctMethod.useCflow("com.flyingh.javassist.Calc");
+		ctMethod.insertBefore("System.out.println(\"cflow:\"+$cflow(com.flyingh.javassist.Calc));");
+		Class<?> cls = ctClass.toClass();
+		Calc newInstance = (Calc) cls.newInstance();
+		Method method = cls.getDeclaredMethod("fact", int.class);
+		System.out.println(method.invoke(newInstance, 5));
+	}
 
 	@Test
 	public void test() throws NotFoundException, CannotCompileException,
