@@ -55,8 +55,8 @@ public class Demo3 {
 		CtClass ctClass = ClassPool.getDefault().get(
 				"com.flyingh.javassist.Calc");
 		CtMethod ctMethod = ctClass.getDeclaredMethod("fact");
-		ctMethod.useCflow("com.flyingh.javassist.Calc");
-		ctMethod.insertBefore("System.out.println(\"cflow:\"+$cflow(com.flyingh.javassist.Calc));");
+		ctMethod.useCflow("com.flyingh.javassist.Calc.fact");
+		ctMethod.insertBefore("System.out.println(\"cflow:\"+$cflow(com.flyingh.javassist.Calc.fact));");
 		Class<?> cls = ctClass.toClass();
 		Calc newInstance = (Calc) cls.newInstance();
 		Method method = cls.getDeclaredMethod("fact", int.class);
