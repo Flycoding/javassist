@@ -90,7 +90,7 @@ public class Demo3 {
 					m.replace("System.out.println(\"abc\");$_=$proceed($$);");
 				} else if ("java.io.PrintStream".equals(m.getClassName())
 						&& "println".equals(m.getMethodName())) {
-					m.replace("System.out.println(\"A\");$_=$proceed($$);System.out.println(\"B\");System.out.println($1);");
+					m.replace("System.out.println(\"A\");$_=$proceed($$);System.out.println(\"B\");System.out.println($1);System.out.println($0);System.out.println($class);System.out.println($type);");
 				}
 			}
 
