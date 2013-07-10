@@ -49,7 +49,7 @@ public class Demo3 {
 		CtClass ctClass = ClassPool.getDefault().get(
 				"com.flyingh.javassist.Point");
 		CtMethod ctMethod = ctClass.getDeclaredMethod("move");
-		ctMethod.insertBefore("{System.out.println($1);System.out.println($2);$1=100;System.out.println($1);$1=250;System.out.println($1);}");
+		ctMethod.insertBefore("{System.out.println($0);System.out.println(this);System.out.println($1);System.out.println($2);$1=100;System.out.println($1);$1=250;System.out.println($1);}");
 		ctClass.writeFile();
 		Class<?> cls = ctClass.toClass();
 		Object newInstance = cls.newInstance();
