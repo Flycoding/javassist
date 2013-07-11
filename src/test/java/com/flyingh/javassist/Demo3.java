@@ -8,6 +8,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.CtNewMethod;
 import javassist.NotFoundException;
 import javassist.expr.ExprEditor;
 import javassist.expr.FieldAccess;
@@ -18,6 +19,12 @@ import org.junit.Test;
 class Point {
 	private int x;
 	private int y;
+
+	public Point(int x, int y) {
+		super();
+		this.x = x;
+		this.y = y;
+	}
 
 	public void move(int dx, int dy) {
 		x += dx;
@@ -38,6 +45,32 @@ class Point {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	@Override
+	public String toString() {
+		return "Point [x=" + x + ", y=" + y + "]";
+	}
+
+}
+
+class Circle {
+	private int x;
+	private int y;
+
+	public Circle() {
+		super();
+	}
+
+	public Circle(int x, int y) {
+		super();
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public String toString() {
+		return "Circle [x=" + x + ", y=" + y + "]";
 	}
 
 }
@@ -69,7 +102,55 @@ class Person {
 
 }
 
+class User {
+	private String name = "flycoding";
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}
+
 public class Demo3 {
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void test5() throws NotFoundException, CannotCompileException,
+			IllegalArgumentException, SecurityException,
+			IllegalAccessException, InvocationTargetException,
+			NoSuchMethodException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.User");
+		// CtMethod ctMethod = CtNewMethod
+		// .make("public void say(String name){$0.name=name;System.out.println(\"my name is:\"+this.name);}",
+		// ctClass);
+		CtMethod ctMethod = CtNewMethod
+				.make("public void say(String name){$proceed(name);System.out.println(\"my name is:\"+this.name);}",
+						ctClass, "this", "setName");
+		ctClass.addMethod(ctMethod);
+		ctClass.toClass().getDeclaredMethod("say", String.class)
+				.invoke(new User(), "flyingh");
+	}
+
+	@Test
+	public void test4() throws NotFoundException, CannotCompileException,
+			SecurityException, NoSuchMethodException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.User");
+		CtMethod ctMethod = CtNewMethod.make(
+				"public void say(){System.out.println(name+\",Hello\");}",
+				ctClass);
+		ctClass.addMethod(ctMethod);
+		Class<?> cls = ctClass.toClass();
+		Method sayMethod = cls.getDeclaredMethod("say");
+		User user = new User();
+		sayMethod.invoke(user);
+	}
 
 	@Test
 	public void test3() throws NotFoundException, CannotCompileException,
