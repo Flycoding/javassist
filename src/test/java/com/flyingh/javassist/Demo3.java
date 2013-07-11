@@ -9,6 +9,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import javassist.Modifier;
 import javassist.NotFoundException;
 import javassist.expr.ExprEditor;
 import javassist.expr.FieldAccess;
@@ -122,6 +123,27 @@ class User {
 }
 
 public class Demo3 {
+
+	@Test
+	public void test7() throws NotFoundException, CannotCompileException,
+			SecurityException, NoSuchMethodException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException,
+			InstantiationException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.Calc");
+		CtMethod fooCtMethod = CtNewMethod.make(
+				"public abstract int foo(int i);", ctClass);
+		CtMethod barCtMethod = CtNewMethod.make(
+				"public abstract int bar(int i);", ctClass);
+		ctClass.addMethod(fooCtMethod);
+		ctClass.addMethod(barCtMethod);
+		fooCtMethod.setBody("{return $1==1||$1==0?1:$1*bar($1-1);}");
+		barCtMethod.setBody("{return foo($1);}");
+		ctClass.setModifiers(ctClass.getModifiers() & ~Modifier.ABSTRACT);
+		Class<?> cls = ctClass.toClass();
+		Method fooMethod = cls.getDeclaredMethod("foo", int.class);
+		System.out.println(fooMethod.invoke(new Calc(), 5));
+	}
 
 	@Test
 	public void test6() throws NotFoundException, CannotCompileException,
