@@ -104,6 +104,7 @@ class Person {
 
 class User {
 	private String name = "flycoding";
+	private int age = 22;
 
 	public String getName() {
 		return name;
@@ -113,9 +114,30 @@ class User {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", age=" + age + "]";
+	}
+
 }
 
 public class Demo3 {
+
+	@Test
+	public void test6() throws NotFoundException, CannotCompileException,
+			IllegalArgumentException, SecurityException,
+			IllegalAccessException, InvocationTargetException,
+			NoSuchMethodException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.User");
+		CtMethod ctMethod = new CtMethod(CtClass.intType, "getAge",
+				new CtClass[] {}, ctClass);
+		ctMethod.setBody("{return age;}");
+		// ctMethod.setModifiers(ctMethod.getModifiers() & ~Modifier.ABSTRACT);
+		ctClass.addMethod(ctMethod);
+		Class<?> cls = ctClass.toClass();
+		System.out.println(cls.getDeclaredMethod("getAge").invoke(new User()));
+	}
 
 	@SuppressWarnings("unchecked")
 	@Test
