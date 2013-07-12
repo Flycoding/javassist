@@ -105,6 +105,13 @@ class Person {
 
 }
 
+@interface Author {
+	String name() default "flycoding";
+
+	String email() default "flycoding@yeah.net";
+}
+
+@Author(name = "flyingh")
 class User {
 	private String name = "flycoding";
 	private int age = 22;
@@ -125,6 +132,15 @@ class User {
 }
 
 public class Demo3 {
+
+	@Test
+	public void test10() throws NotFoundException, ClassNotFoundException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.User");
+		Author author = (Author) ctClass.getAnnotation(Author.class);
+		System.out.println(author.name());
+		System.out.println(author.email());
+	}
 
 	@Test
 	public void test9() throws NotFoundException, CannotCompileException,
