@@ -127,15 +127,19 @@ class User {
 public class Demo3 {
 
 	@Test
-	public void test8() throws NotFoundException, CannotCompileException {
+	public void test8() throws NotFoundException, CannotCompileException,
+			IllegalArgumentException, IllegalAccessException {
 		ClassPool pool = ClassPool.getDefault();
 		CtClass ctClass = pool.get("com.flyingh.javassist.User");
 		CtField ctField = new CtField(pool.get("java.lang.String"), "email",
 				ctClass);
-		ctClass.addField(ctField);
+		ctClass.addField(ctField, "\"flycoding@yeah.net\"");
 		Field[] declaredFields = ctClass.toClass().getDeclaredFields();
 		for (Field field : declaredFields) {
 			System.out.println(field.getName() + "-->" + field.getType());
+			if ("email".equals(field.getName())) {
+				System.out.println(field.get(new User()));
+			}
 		}
 	}
 
