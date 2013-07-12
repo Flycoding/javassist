@@ -127,6 +127,20 @@ class User {
 public class Demo3 {
 
 	@Test
+	public void test9() throws NotFoundException, CannotCompileException,
+			IllegalArgumentException, SecurityException,
+			IllegalAccessException, NoSuchFieldException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.User");
+		CtField ctField = CtField
+				.make("public java.util.Date birthday=new java.util.Date();",
+						ctClass);
+		ctClass.addField(ctField);
+		System.out.println(String.format("%1$tF %1$tT", ctClass.toClass()
+				.getDeclaredField("birthday").get(new User())));
+	}
+
+	@Test
 	public void test8() throws NotFoundException, CannotCompileException,
 			IllegalArgumentException, IllegalAccessException {
 		ClassPool pool = ClassPool.getDefault();
