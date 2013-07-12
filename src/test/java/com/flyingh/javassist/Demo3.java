@@ -1,12 +1,14 @@
 package com.flyingh.javassist;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.Modifier;
@@ -123,6 +125,19 @@ class User {
 }
 
 public class Demo3 {
+
+	@Test
+	public void test8() throws NotFoundException, CannotCompileException {
+		ClassPool pool = ClassPool.getDefault();
+		CtClass ctClass = pool.get("com.flyingh.javassist.User");
+		CtField ctField = new CtField(pool.get("java.lang.String"), "email",
+				ctClass);
+		ctClass.addField(ctField);
+		Field[] declaredFields = ctClass.toClass().getDeclaredFields();
+		for (Field field : declaredFields) {
+			System.out.println(field.getName() + "-->" + field.getType());
+		}
+	}
 
 	@Test
 	public void test7() throws NotFoundException, CannotCompileException,
