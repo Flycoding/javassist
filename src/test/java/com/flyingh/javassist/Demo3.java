@@ -134,6 +134,15 @@ class User {
 public class Demo3 {
 
 	@Test
+	public void test11() throws NotFoundException, CannotCompileException {
+		ClassPool pool = ClassPool.getDefault();
+		// pool.importPackage("java.awt.Color");
+		pool.importPackage("java.awt");
+		CtClass ctClass = pool.get("com.flyingh.javassist.User");
+		ctClass.addField(CtField.make("public Color c;", ctClass));
+	}
+
+	@Test
 	public void test10() throws NotFoundException, ClassNotFoundException {
 		CtClass ctClass = ClassPool.getDefault().get(
 				"com.flyingh.javassist.User");
