@@ -134,7 +134,7 @@ class User {
 public class Demo3 {
 	@Test
 	public void test12() throws NotFoundException, CannotCompileException, IOException {
-		CtClass.debugDump = "./dump";
+		CtClass.debugDump = "dump";
 		test11();
 	}
 
