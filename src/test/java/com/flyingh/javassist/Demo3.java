@@ -132,14 +132,20 @@ class User {
 }
 
 public class Demo3 {
+	@Test
+	public void test12() throws NotFoundException, CannotCompileException, IOException {
+		CtClass.debugDump = "./dump";
+		test11();
+	}
 
 	@Test
-	public void test11() throws NotFoundException, CannotCompileException {
+	public void test11() throws NotFoundException, CannotCompileException, IOException {
 		ClassPool pool = ClassPool.getDefault();
 		// pool.importPackage("java.awt.Color");
 		pool.importPackage("java.awt");
 		CtClass ctClass = pool.get("com.flyingh.javassist.User");
 		ctClass.addField(CtField.make("public Color c;", ctClass));
+		ctClass.writeFile();
 	}
 
 	@Test
