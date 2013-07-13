@@ -13,6 +13,12 @@ import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
+import javassist.bytecode.BadBytecode;
+import javassist.bytecode.ClassFile;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.CodeIterator;
+import javassist.bytecode.MethodInfo;
+import javassist.bytecode.Mnemonic;
 import javassist.expr.ExprEditor;
 import javassist.expr.FieldAccess;
 import javassist.expr.MethodCall;
@@ -132,6 +138,23 @@ class User {
 }
 
 public class Demo3 {
+
+	@Test
+	public void test14() throws NotFoundException, BadBytecode {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.Calc");
+		ClassFile classFile = ctClass.getClassFile();
+		MethodInfo mInfo = classFile.getMethod("fact");
+		CodeAttribute codeAttribute = mInfo.getCodeAttribute();
+		CodeIterator iterator = codeAttribute.iterator();
+		while (iterator.hasNext()) {
+			int next = iterator.next();
+			int byteAt = iterator.byteAt(next);
+			System.out.println(Mnemonic.OPCODE[byteAt]);
+		}
+
+	}
+
 	@Test
 	public void test13() throws NotFoundException, CannotCompileException,
 			IOException {
