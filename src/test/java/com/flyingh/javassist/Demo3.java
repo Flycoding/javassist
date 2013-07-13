@@ -133,13 +133,27 @@ class User {
 
 public class Demo3 {
 	@Test
-	public void test12() throws NotFoundException, CannotCompileException, IOException {
+	public void test13() throws NotFoundException, CannotCompileException,
+			IOException {
+		CtClass ctClass = ClassPool.getDefault().get(
+				"com.flyingh.javassist.Calc");
+		CtMethod ctMethod = CtNewMethod.make(
+				"public int length(int[] args){return args.length;}", ctClass);
+		ctMethod.setModifiers(ctMethod.getModifiers() | Modifier.VARARGS);
+		ctClass.addMethod(ctMethod);
+		ctClass.writeFile();
+	}
+
+	@Test
+	public void test12() throws NotFoundException, CannotCompileException,
+			IOException {
 		CtClass.debugDump = "dump";
 		test11();
 	}
 
 	@Test
-	public void test11() throws NotFoundException, CannotCompileException, IOException {
+	public void test11() throws NotFoundException, CannotCompileException,
+			IOException {
 		ClassPool pool = ClassPool.getDefault();
 		// pool.importPackage("java.awt.Color");
 		pool.importPackage("java.awt");
